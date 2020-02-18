@@ -15,19 +15,19 @@ def read(*parts):
     return open(osp.join(get_script_path(), *parts)).read()
 
 
-lttb_module = Extension('lttbc', sources=['lttbc.c'],
-                        define_macros=[
-                            ('NPY_NO_DEPRECATED_API', 'NPY_1_7_API_VERSION')],
-                        include_dirs=[numpy.get_include(),
-                                      get_script_path()],
-                        )
+lttbc_py = Extension('lttbc', sources=['lttbc.c'],
+                     define_macros=[
+                         ('NPY_NO_DEPRECATED_API', 'NPY_1_7_API_VERSION')],
+                     include_dirs=[numpy.get_include(),
+                                   get_script_path()],
+                     )
 
 setup(
     name="lttbc",
     author="European XFEL GmbH",
     version="0.1.7",
     include_dirs=[numpy.get_include(), get_script_path()],
-    ext_modules=[lttb_module],
+    ext_modules=[lttbc_py],
     author_email="dennis.goeries@xfel.eu",
     maintainer="Dennis Goeries",
     url="https://github.com/dgoeries/lttbc/",

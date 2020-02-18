@@ -153,7 +153,7 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
 }
 
 // Method definition object
-static PyMethodDef lttb_methods[] = {
+static PyMethodDef lttbc_methods[] = {
     {
         "downsample", // The name of the method
         downsample, // Function pointer to the method implementation
@@ -168,7 +168,7 @@ static struct PyModuleDef lttbc_module_definition = {
     "lttbc",
     "A Python module that computes the largest triangle three buckets algorithm (LTTB) using C code.",
     -1,
-    lttb_methods
+    lttbc_methods
 };
 
 // Module initialization
