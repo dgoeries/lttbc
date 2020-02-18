@@ -2,7 +2,7 @@
 import os.path as osp
 import sys
 
-from distutils.core import setup, Extension
+from setuptools import setup, Extension
 
 import numpy
 
@@ -25,12 +25,14 @@ lttb_module = Extension('lttbc', sources=['lttbc.c'],
 setup(
     name="lttbc",
     author="European XFEL GmbH",
-    version="0.1.6",
+    version="0.1.7",
     include_dirs=[numpy.get_include(), get_script_path()],
     ext_modules=[lttb_module],
     author_email="dennis.goeries@xfel.eu",
     maintainer="Dennis Goeries",
-    url="http://www.xfel.eu",
-    description="Largest triangle three buckets module written in C",
+    url="https://github.com/dgoeries/lttbc/",
+    description="Largest triangle three buckets module for Python written in C",
     license="MIT",
+    install_requires=[
+        'numpy'],
 )

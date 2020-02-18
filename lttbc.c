@@ -25,8 +25,6 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
     const int M = (int)PyArray_DIM(y_array, 0);
     // Dimension check for both input arrays
     if (N != M) {
-        Py_DECREF(x_array);
-        Py_DECREF(y_array);
         PyErr_SetString(PyExc_RuntimeError, "X and Y must have the same dimension!");
     }
 
@@ -57,13 +55,13 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
 
     // The main loop here!
     int sampled_index = 0;
-    const float every = (float)(data_length - 2) / (threshold - 2);
+    const double every = (double)(data_length - 2) / (threshold - 2);
 
     int a = 0;
     int next_a = 0;
 
-    float max_area_point_x = 0.0;
-    float max_area_point_y = 0.0;
+    double max_area_point_x = 0.0;
+    double max_area_point_y = 0.0;
 
     // Always add the first point!
     if (npy_isfinite(x[a])) {
@@ -82,8 +80,8 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
     int i;
     for (i = 0; i < threshold - 2; ++i) {
         // Calculate point average for next bucket (containing c)
-        float avg_x = 0;
-        float avg_y = 0;
+        double avg_x = 0;
+        double avg_y = 0;
         int avg_range_start = (int)(floor((i + 1)* every) + 1);
         int avg_range_end = (int)(floor((i + 2) * every) + 1);
         if (avg_range_end >= data_length){
@@ -103,13 +101,13 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
         int range_to = (int)(floor((i + 1) * every) + 1);
 
         // Point a
-        float point_a_x = x[a];
-        float point_a_y = y[a];
+        double point_a_x = x[a];
+        double point_a_y = y[a];
 
-        float max_area = -1.0;
+        double max_area = -1.0;
         for (; range_offs < range_to; range_offs++){
             // Calculate triangle area over three buckets
-            float area = fabs((point_a_x - avg_x) * (y[range_offs] - point_a_y) - (point_a_x - x[range_offs]) * (avg_y - point_a_y)) * 0.5;
+            double area = fabs((point_a_x - avg_x) * (y[range_offs] - point_a_y) - (point_a_x - x[range_offs]) * (avg_y - point_a_y)) * 0.5;
             if (area > max_area){
                 max_area = area;
                 max_area_point_x = x[range_offs];
@@ -127,8 +125,8 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
     }
 
     // Always add last! Check for finite values!
-    float last_a_x = x[data_length - 1];
-    float last_a_y = y[data_length - 1];
+    double last_a_x = x[data_length - 1];
+    double last_a_y = y[data_length - 1];
     if (npy_isfinite(last_a_x)) {
         sampled_x_data[sampled_index] = last_a_x;
     }
