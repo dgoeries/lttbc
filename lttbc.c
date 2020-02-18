@@ -68,13 +68,13 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
         sampled_x_data[sampled_index] = x[a];
     }
     else {
-         sampled_x_data[sampled_index] = 0;
+         sampled_x_data[sampled_index] = 0.0;
     }
     if (npy_isfinite(y[a])) {
         sampled_y_data[sampled_index] = y[a];
     }
     else {
-         sampled_y_data[sampled_index] = 0;
+         sampled_y_data[sampled_index] = 0.0;
     }
     sampled_index++;
     int i;
@@ -131,13 +131,13 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
         sampled_x_data[sampled_index] = last_a_x;
     }
     else {
-         sampled_x_data[sampled_index] = 0;
+         sampled_x_data[sampled_index] = 0.0;
     }
     if (npy_isfinite(last_a_y)) {
         sampled_y_data[sampled_index] = last_a_y;
     }
     else {
-        sampled_y_data[sampled_index] = 0;
+        sampled_y_data[sampled_index] = 0.0;
     }
 
     // Provide our return value
