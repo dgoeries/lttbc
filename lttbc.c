@@ -163,9 +163,9 @@ static PyMethodDef lttb_methods[] = {
     {NULL, NULL, 0, NULL}
 };
 
-static struct PyModuleDef lttb_module_definition = {
+static struct PyModuleDef lttbc_module_definition = {
     PyModuleDef_HEAD_INIT,
-    "lttb",
+    "lttbc",
     "A Python module that computes the largest triangle three buckets algorithm (LTTB) using C code.",
     -1,
     lttb_methods
@@ -175,5 +175,5 @@ static struct PyModuleDef lttb_module_definition = {
 PyMODINIT_FUNC PyInit_lttbc(void) {
     Py_Initialize();
     import_array();
-    return PyModule_Create(&lttb_module_definition);
+    return PyModule_Create(&lttbc_module_definition);
 }
