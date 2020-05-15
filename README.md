@@ -13,7 +13,7 @@ set of ``10000`` data points sampled to ``1000`` and ``300`` points.
 
 ## Installing
 
-You can also install it [from PyPI](https://pypi.org/project/extra-data/)
+You can also install it [from PyPI](https://pypi.org/project/lttbc/)
 to use in other environments with Python 3.5 or later:
 
     pip install lttbc
