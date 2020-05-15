@@ -6,8 +6,8 @@ The code has been translated from the work of Sveinn Steinarsson (https://github
 
 ## Demo
 
-The examples shows the efficiency of the downsampling algorithm with an example
-set of ``10000`` data points sampled to ``1000`` and ``300`` points.
+The examples show the efficiency of the downsampling algorithm with a data set
+set of ``5000`` data points down sampled to ``500`` and ``250`` points.
 
 ![alt text](images/example.png "source")  
 
@@ -21,7 +21,7 @@ to use in other environments with Python 3.5 or later:
 ## How to use on the field
 
 The module ``lttbc`` differs in the standard input from other largest triangle three buckets implementations.
-The ``downsample`` function takes an input for ``x`` as well as ``y``:
+The ``downsample`` function takes an input for ``x`` and ``y`` in addition to the ``threshold``:
 
     import lttbc
     import numpy as np
