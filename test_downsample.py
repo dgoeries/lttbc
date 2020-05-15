@@ -14,8 +14,8 @@ def test_downsample_uint64():
     nx, ny = lttbc.downsample(x, y, THRESHOLD)
     assert len(nx) == THRESHOLD
     assert len(ny) == THRESHOLD
-    assert nx.dtype == np.float
-    assert ny.dtype == np.float
+    assert nx.dtype == np.double
+    assert ny.dtype == np.double
 
 
 def test_downsample_bool():
@@ -25,8 +25,8 @@ def test_downsample_bool():
     nx, ny = lttbc.downsample(x, y, THRESHOLD)
     assert len(nx) == THRESHOLD
     assert len(ny) == THRESHOLD
-    assert nx.dtype == np.float
-    assert ny.dtype == np.float
+    assert nx.dtype == np.double
+    assert ny.dtype == np.double
     test_array = np.array([1.0] * THRESHOLD, dtype=np.float)
     test_array_bool = np.array([1.0] * THRESHOLD, dtype=np.bool)
     np.testing.assert_array_almost_equal(ny, test_array)
@@ -40,8 +40,8 @@ def test_inf():
     nx, ny = lttbc.downsample(x, y, THRESHOLD)
     assert len(nx) == THRESHOLD
     assert len(ny) == THRESHOLD
-    assert nx.dtype == np.float
-    assert ny.dtype == np.float
+    assert nx.dtype == np.double
+    assert ny.dtype == np.double
     test_array = np.array([0.0] * THRESHOLD, dtype=np.float)
     np.testing.assert_array_almost_equal(ny, test_array)
 
@@ -53,8 +53,8 @@ def test_nan():
     nx, ny = lttbc.downsample(x, y, THRESHOLD)
     assert len(nx) == THRESHOLD
     assert len(ny) == THRESHOLD
-    assert nx.dtype == np.float
-    assert ny.dtype == np.float
+    assert nx.dtype == np.double
+    assert ny.dtype == np.double
     test_array = np.array([0.0] * THRESHOLD, dtype=np.float)
     np.testing.assert_array_almost_equal(ny, test_array)
 
