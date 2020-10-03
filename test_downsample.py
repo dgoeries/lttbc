@@ -84,7 +84,7 @@ def test_benchmark():
         return nx, ny
 
     t_start = perf_counter()
-    sample()
+    nx, ny = sample()
     elapsed = perf_counter() - t_start
     assert elapsed < 0.1
 
@@ -98,3 +98,4 @@ def test_negative_threshold():
     nx, ny = lttbc.downsample(x, y, SAMPLE_SIZE)
     assert len(nx) == LARGE_ARRAY
     assert len(ny) == LARGE_ARRAY
+
