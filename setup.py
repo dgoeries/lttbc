@@ -25,7 +25,7 @@ lttbc_py = Extension('lttbc', sources=['lttbc.c'],
 setup(
     name="lttbc",
     author="European XFEL GmbH",
-    version="0.1.9",
+    version="0.2.0",
     include_dirs=[numpy.get_include(), get_script_path()],
     ext_modules=[lttbc_py],
     author_email="dennis.goeries@xfel.eu",

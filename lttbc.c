@@ -21,16 +21,16 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
         Py_XDECREF(y_array);
         return NULL;
     }
-    const int N = (int)PyArray_DIM(x_array, 0);
-    const int M = (int)PyArray_DIM(y_array, 0);
+    const npy_intp N = PyArray_DIM(x_array, 0);
+    const npy_intp M = PyArray_DIM(y_array, 0);
     // Dimension check for both input arrays
     if (N != M) {
         PyErr_SetString(PyExc_RuntimeError, "X and Y must have the same dimension!");
     }
 
     // Declare data length and check if we actually have to downsample!
-    const int data_length = N;
-    if (threshold >= data_length || threshold == 0) {
+    const Py_ssize_t data_length = N;
+    if (threshold >= data_length || threshold <= 0) {
         // Nothing to do!
         PyObject *value = Py_BuildValue("OO", x_array, y_array);
         Py_DECREF(x_array);
@@ -54,11 +54,11 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
     double *sampled_y_data = (double*)PyArray_DATA(sampled_y);
 
     // The main loop here!
-    int sampled_index = 0;
+    Py_ssize_t sampled_index = 0;
     const double every = (double)(data_length - 2) / (threshold - 2);
 
-    int a = 0;
-    int next_a = 0;
+    Py_ssize_t a = 0;
+    Py_ssize_t next_a = 0;
 
     double max_area_point_x = 0.0;
     double max_area_point_y = 0.0;
@@ -77,17 +77,17 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
          sampled_y_data[sampled_index] = 0.0;
     }
     sampled_index++;
-    int i;
+    Py_ssize_t i;
     for (i = 0; i < threshold - 2; ++i) {
         // Calculate point average for next bucket (containing c)
         double avg_x = 0;
         double avg_y = 0;
-        int avg_range_start = (int)(floor((i + 1)* every) + 1);
-        int avg_range_end = (int)(floor((i + 2) * every) + 1);
+        Py_ssize_t avg_range_start = (Py_ssize_t)(floor((i + 1)* every) + 1);
+        Py_ssize_t avg_range_end = (Py_ssize_t)(floor((i + 2) * every) + 1);
         if (avg_range_end >= data_length){
             avg_range_end = data_length;
         }
-        int avg_range_length = avg_range_end - avg_range_start;
+        Py_ssize_t avg_range_length = avg_range_end - avg_range_start;
 
         for (;avg_range_start < avg_range_end; avg_range_start++){
             avg_x += x[avg_range_start];
@@ -97,8 +97,8 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
         avg_y /= avg_range_length;
 
         // Get the range for this bucket
-        int range_offs = (int)(floor((i + 0) * every) + 1);
-        int range_to = (int)(floor((i + 1) * every) + 1);
+        Py_ssize_t range_offs = (Py_ssize_t)(floor((i + 0) * every) + 1);
+        Py_ssize_t range_to = (Py_ssize_t)(floor((i + 1) * every) + 1);
 
         // Point a
         double point_a_x = x[a];
