@@ -25,7 +25,7 @@ lttbc_py = Extension('lttbc', sources=['lttbc.c'],
 setup(
     name="lttbc",
     author="European XFEL GmbH",
-    version="0.2.0",
+    use_scm_version=True,
     include_dirs=[numpy.get_include(), get_script_path()],
     ext_modules=[lttbc_py],
     author_email="dennis.goeries@xfel.eu",
@@ -35,5 +35,6 @@ setup(
     license="MIT",
     install_requires=[
         'numpy'],
+    setup_requires=['setuptools_scm'],
     python_requires=">=3.5"
 )
