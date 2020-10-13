@@ -26,6 +26,7 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
     // Dimension check for both input arrays
     if (N != M) {
         PyErr_SetString(PyExc_RuntimeError, "X and Y must have the same dimension!");
+        return NULL;
     }
 
     // Declare data length and check if we actually have to downsample!
