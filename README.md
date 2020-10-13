@@ -9,7 +9,7 @@ The code has been translated from the work of Sveinn Steinarsson (https://github
 The examples show the efficiency of the downsampling algorithm with a data set
 set of ``5000`` data points down sampled to ``500`` and ``250`` points.
 
-![SampleView](images/example.png)  
+![SampleView](images/demo.png)  
 
 Known features and requirements:
 
