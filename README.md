@@ -15,6 +15,7 @@ Known features and requirements:
 
 - The algorithm requires onotonically and finite increasing x data
 - The algorithm requires finite y data (otherwise problems might occur)
+- x and y data have to be of same length (of course)
 - The algorithm changes the **dtype** to **double**
 
 ## Installing
