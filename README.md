@@ -1,4 +1,4 @@
-# lttbc: Largest-Triangle-Three-Buckets (Python using a c implementation) [![PyPi](https://img.shields.io/pypi/v/lttbc?color=blue)](https://pypi.org/project/lttbc/)
+# lttbc: Largest-Triangle-Three-Buckets (Python using a c implementation) [![PyPi](https://img.shields.io/pypi/v/lttbc?color=blue)](https://pypi.org/project/lttbc/)[![Build Status](https://travis-ci.com/dgoeries/lttbc.svg?)](https://travis-ci.com/dgoeries/lttbc)
 
 This is a low-level implementation of the `Largest-Triangle-Three-Buckets` (LTTB) downsampling algorithm written in Python.
 
