@@ -157,3 +157,4 @@ def test_singe_inf():
         [0., 1., np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, 19.],
         dtype=np.float)
     np.testing.assert_array_almost_equal(ny, test_array)
+    assert False
