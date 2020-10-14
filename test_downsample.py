@@ -204,6 +204,7 @@ def test_threshold_larger():
     assert sys.getrefcount(nx) == 2
     assert sys.getrefcount(ny) == 2
 
+    # NOTE: Known feature, we return bool arrays ...
     np.testing.assert_array_almost_equal(nx, x)
     np.testing.assert_array_almost_equal(ny, y)
 
@@ -224,7 +225,7 @@ def test_threshold_wrong_input():
     nx, ny = lttbc.downsample(x, y, np.uint32(1.))
     assert sys.getrefcount(nx) == 2
     assert sys.getrefcount(ny) == 2
-    
+
 
 def test_array_mix_inf_nan():
     """Test mix of problematic input 'inf' and 'nan'"""
