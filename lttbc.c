@@ -25,7 +25,9 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
     const npy_intp M = PyArray_DIM(y_array, 0);
     // Dimension check for both input arrays
     if (N != M) {
-        PyErr_SetString(PyExc_RuntimeError, "X and Y must have the same dimension!");
+        Py_DECREF(x_array);
+        Py_DECREF(y_array);
+        PyErr_SetString(PyExc_RuntimeError, "X and Y must have the same dimension ...");
         return NULL;
     }
 
