@@ -11,6 +11,48 @@ LARGE_ARRAY = 1000000
 LARGE_THRESHOLD = 10000
 
 
+def test_input_list():
+    """Test the down sampling with lists types"""
+    x = [value for value in range(ARRAY_SIZE)]
+    y = [True] * ARRAY_SIZE
+    assert sys.getrefcount(x) == 2
+    assert sys.getrefcount(y) == 2
+    nx, ny = lttbc.downsample(x, y, THRESHOLD)
+    assert len(nx) == THRESHOLD
+    assert len(ny) == THRESHOLD
+    assert nx.dtype == np.double
+    assert ny.dtype == np.double
+    assert sys.getrefcount(x) == 2
+    assert sys.getrefcount(y) == 2
+    assert sys.getrefcount(nx) == 2
+    assert sys.getrefcount(ny) == 2
+    test_array = np.array([1.0] * THRESHOLD, dtype=np.float)
+    test_array_bool = np.array([1.0] * THRESHOLD, dtype=np.bool)
+    np.testing.assert_array_almost_equal(ny, test_array)
+    np.testing.assert_array_almost_equal(ny, test_array_bool)
+
+
+def test_input_list_array():
+    """Test the down sampling with mixed types"""
+    x = [value for value in range(ARRAY_SIZE)]
+    y = np.array([True] * ARRAY_SIZE, dtype=np.bool)
+    assert sys.getrefcount(x) == 2
+    assert sys.getrefcount(y) == 2
+    nx, ny = lttbc.downsample(x, y, THRESHOLD)
+    assert len(nx) == THRESHOLD
+    assert len(ny) == THRESHOLD
+    assert nx.dtype == np.double
+    assert ny.dtype == np.double
+    assert sys.getrefcount(x) == 2
+    assert sys.getrefcount(y) == 2
+    assert sys.getrefcount(nx) == 2
+    assert sys.getrefcount(ny) == 2
+    test_array = np.array([1.0] * THRESHOLD, dtype=np.float)
+    test_array_bool = np.array([1.0] * THRESHOLD, dtype=np.bool)
+    np.testing.assert_array_almost_equal(ny, test_array)
+    np.testing.assert_array_almost_equal(ny, test_array_bool)
+
+
 def test_downsample_uint64():
     """Test the base down sampling of the module"""
     x = np.arange(ARRAY_SIZE, dtype='int32')
@@ -151,6 +193,7 @@ def test_threshold_larger():
     y = np.random.randint(1000, size=ARRAY_SIZE, dtype='uint64')
     assert sys.getrefcount(x) == 2
     assert sys.getrefcount(y) == 2
+    # Will return the arrays!
     nx, ny = lttbc.downsample(x, y, ARRAY_SIZE + 1)
     assert len(nx) == ARRAY_SIZE
     assert len(ny) == ARRAY_SIZE
@@ -161,10 +204,29 @@ def test_threshold_larger():
     assert sys.getrefcount(nx) == 2
     assert sys.getrefcount(ny) == 2
 
+    np.testing.assert_array_almost_equal(nx, x)
     np.testing.assert_array_almost_equal(ny, y)
 
 
-def test_array_mix():
+def test_threshold_wrong_input():
+    """Test wrong input for threshold"""
+    x = np.arange(ARRAY_SIZE, dtype='int32')
+    y = np.random.randint(1000, size=ARRAY_SIZE, dtype='uint64')
+    assert sys.getrefcount(x) == 2
+    assert sys.getrefcount(y) == 2
+    # Float input
+    with pytest.raises(TypeError):
+        nx, ny = lttbc.downsample(x, y, 1.0)
+    with pytest.raises(TypeError):
+        nx, ny = lttbc.downsample(x, y, 1.)
+
+    # Using numpy integers does not raise an exception!
+    nx, ny = lttbc.downsample(x, y, np.uint32(1.))
+    assert sys.getrefcount(nx) == 2
+    assert sys.getrefcount(ny) == 2
+    
+
+def test_array_mix_inf_nan():
     """Test mix of problematic input 'inf' and 'nan'"""
 
     x = np.arange(20, dtype='int32')
@@ -188,7 +250,7 @@ def test_array_mix():
     np.testing.assert_array_almost_equal(ny, test_array)
 
 
-def test_singe_nan():
+def test_single_nan():
     """Test single 'nan' input for down sampling"""
     x = np.arange(20, dtype='int32')
     y = np.array([0.0, 1.0, 2.0, np.nan, 4.0, 5.0, 6.0, 7.0, 8.0,
@@ -211,7 +273,7 @@ def test_singe_nan():
     np.testing.assert_array_almost_equal(ny, test_array)
 
 
-def test_singe_inf():
+def test_single_inf():
     """Test single 'inf' input for down sampling
 
     XXX: Apparently infinite values provide a crappy result...
