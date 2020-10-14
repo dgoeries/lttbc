@@ -7,14 +7,14 @@
 
 static PyObject* downsample(PyObject *self, PyObject *args) {
     int threshold;
-    PyObject *x_obj, *y_obj;
+    PyObject *x_obj=NULL, *y_obj=NULL;
 
     if (!PyArg_ParseTuple(args, "OOi", &x_obj, &y_obj, &threshold))
         return NULL;
 
     // Interpret the input objects as numpy arrays, with reqs (contiguous, aligned, and writeable ...)
-    PyArrayObject *x_array = (PyArrayObject *)PyArray_FROM_OTF(x_obj, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
-    PyArrayObject *y_array = (PyArrayObject *)PyArray_FROM_OTF(y_obj, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
+    PyArrayObject *x_array = PyArray_FROM_OTF(x_obj, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
+    PyArrayObject *y_array = PyArray_FROM_OTF(y_obj, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
     if (x_array == NULL || y_array == NULL) {
         Py_XDECREF(x_array);
         Py_XDECREF(y_array);
@@ -47,9 +47,9 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
     // Create an empty output array with shape and dim for the output!
     npy_intp dims[1];
     dims[0] = threshold;
-    PyArrayObject *sampled_x = (PyArrayObject *)PyArray_Empty(1, dims,
+    PyArrayObject *sampled_x = PyArray_Empty(1, dims,
         PyArray_DescrFromType(NPY_DOUBLE), 0);
-    PyArrayObject *sampled_y = (PyArrayObject *)PyArray_Empty(1, dims,
+    PyArrayObject *sampled_y = PyArray_Empty(1, dims,
         PyArray_DescrFromType(NPY_DOUBLE), 0);
     // Get access to its data
     double *sampled_x_data = (double*)PyArray_DATA(sampled_x);
@@ -158,8 +158,8 @@ static PyMethodDef lttbc_methods[] = {
     {
         "downsample", // The name of the method
         downsample, // Function pointer to the method implementation
-        METH_VARARGS, // Flags indicating special features of this method
-        "Compute the largest triangle three buckets (LTTB) algorithm in a C extension." // Contents of this method's docstring
+        METH_VARARGS,
+        "Compute the largest triangle three buckets (LTTB) algorithm in a C extension."
     },
     {NULL, NULL, 0, NULL}
 };
