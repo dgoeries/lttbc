@@ -12,7 +12,7 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
     if (!PyArg_ParseTuple(args, "OOi", &x_obj, &y_obj, &threshold))
         return NULL;
 
-    // Interpret the input objects as numpy arrays
+    // Interpret the input objects as numpy arrays, with reqs (contiguous, aligned, and writeable ...)
     PyArrayObject *x_array = (PyArrayObject *)PyArray_FROM_OTF(x_obj, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
     PyArrayObject *y_array = (PyArrayObject *)PyArray_FROM_OTF(y_obj, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
     if (x_array == NULL || y_array == NULL) {
@@ -141,7 +141,6 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
     else {
         sampled_y_data[sampled_index] = 0.0;
     }
-
     // Provide our return value
     PyObject *value = Py_BuildValue("OO", sampled_x, sampled_y);
 
