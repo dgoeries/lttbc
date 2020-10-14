@@ -39,7 +39,7 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
         Py_DECREF(x_array);
         Py_DECREF(y_array);
         return value;
-        }
+    }
 
     // Access the data in the NDArray!
     double *x = (double*)PyArray_DATA(x_array);
