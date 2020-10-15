@@ -204,7 +204,7 @@ def test_threshold_larger():
     assert sys.getrefcount(nx) == 2
     assert sys.getrefcount(ny) == 2
 
-    # NOTE: Known feature, we return bool arrays ...
+    # NOTE: Known feature, we return double arrays ...
     np.testing.assert_array_almost_equal(nx, x)
     np.testing.assert_array_almost_equal(ny, y)
 
