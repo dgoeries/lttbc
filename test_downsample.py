@@ -176,7 +176,7 @@ def test_array_size():
     y = np.random.randint(1000, size=ARRAY_SIZE - 1, dtype='uint64')
     assert sys.getrefcount(x) == 2
     assert sys.getrefcount(y) == 2
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         assert lttbc.downsample(x, y, ARRAY_SIZE)
     assert sys.getrefcount(x) == 2
     assert sys.getrefcount(y) == 2
