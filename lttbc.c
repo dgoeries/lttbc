@@ -36,7 +36,7 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
     if (!PyArray_SAMESHAPE(x_array, y_array)) {
         Py_DECREF(x_array);
         Py_DECREF(y_array);
-        PyErr_SetString(PyExc_ValueError, "x and y must have the same dimension ...");
+        PyErr_SetString(PyExc_ValueError, "Input x and y must have the same shape ...");
         return NULL;
     }
 
