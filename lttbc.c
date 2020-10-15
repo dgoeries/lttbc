@@ -1,42 +1,54 @@
+#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #include <Python.h>
 #include <numpy/arrayobject.h>
 #include <numpy/npy_math.h>
 #include <math.h>
 
-#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
-
 
 static PyObject* downsample(PyObject *self, PyObject *args) {
     int threshold;
-    PyObject *x_obj, *y_obj;
+    PyObject *x_obj = NULL, *y_obj = NULL;
 
     if (!PyArg_ParseTuple(args, "OOi", &x_obj, &y_obj, &threshold))
         return NULL;
 
-    // Interpret the input objects as numpy arrays
-    PyArrayObject *x_array = (PyArrayObject *)PyArray_FROM_OTF(x_obj, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
-    PyArrayObject *y_array = (PyArrayObject *)PyArray_FROM_OTF(y_obj, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
+    if ((!PyArray_Check(x_obj) && !PyList_Check(x_obj)) || (!PyArray_Check(y_obj) && !PyList_Check(y_obj))) {
+        PyErr_SetString(PyExc_TypeError, "Function requires x and y input to be of type list or ndarray ...");
+        return NULL;
+    }
+    PyArrayObject *x_array = NULL, *y_array = NULL;
+    // Interpret the input objects as numpy arrays, with reqs (contiguous, aligned, and writeable ...)
+    x_array = PyArray_FROM_OTF(x_obj, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
+    y_array = PyArray_FROM_OTF(y_obj, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
     if (x_array == NULL || y_array == NULL) {
         Py_XDECREF(x_array);
         Py_XDECREF(y_array);
         return NULL;
     }
-    const npy_intp N = PyArray_DIM(x_array, 0);
-    const npy_intp M = PyArray_DIM(y_array, 0);
-    // Dimension check for both input arrays
-    if (N != M) {
-        PyErr_SetString(PyExc_RuntimeError, "X and Y must have the same dimension!");
+
+    if (PyArray_NDIM(x_array) != 1 || PyArray_NDIM(y_array) != 1) {
+        Py_DECREF(x_array);
+        Py_DECREF(y_array);
+        PyErr_SetString(PyExc_ValueError, "Both x and y needs to have a single dimension ...");
+        return NULL;
+    }
+
+    if (!PyArray_SAMESHAPE(x_array, y_array)) {
+        Py_DECREF(x_array);
+        Py_DECREF(y_array);
+        PyErr_SetString(PyExc_RuntimeError, "x and y must have the same dimension ...");
+        return NULL;
     }
 
     // Declare data length and check if we actually have to downsample!
-    const Py_ssize_t data_length = N;
+    const Py_ssize_t data_length =  PyArray_DIM(x_array, 0);
     if (threshold >= data_length || threshold <= 0) {
         // Nothing to do!
         PyObject *value = Py_BuildValue("OO", x_array, y_array);
         Py_DECREF(x_array);
         Py_DECREF(y_array);
         return value;
-        }
+    }
 
     // Access the data in the NDArray!
     double *x = (double*)PyArray_DATA(x_array);
@@ -45,11 +57,11 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
     // Create an empty output array with shape and dim for the output!
     npy_intp dims[1];
     dims[0] = threshold;
-    PyArrayObject *sampled_x = (PyArrayObject *)PyArray_Empty(1, dims,
+    PyArrayObject *sampled_x = PyArray_Empty(1, dims,
         PyArray_DescrFromType(NPY_DOUBLE), 0);
-    PyArrayObject *sampled_y = (PyArrayObject *)PyArray_Empty(1, dims,
+    PyArrayObject *sampled_y = PyArray_Empty(1, dims,
         PyArray_DescrFromType(NPY_DOUBLE), 0);
-    // Get access to its data
+    // Get a pointer to its data
     double *sampled_x_data = (double*)PyArray_DATA(sampled_x);
     double *sampled_y_data = (double*)PyArray_DATA(sampled_y);
 
@@ -139,7 +151,6 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
     else {
         sampled_y_data[sampled_index] = 0.0;
     }
-
     // Provide our return value
     PyObject *value = Py_BuildValue("OO", sampled_x, sampled_y);
 
@@ -157,8 +168,8 @@ static PyMethodDef lttbc_methods[] = {
     {
         "downsample", // The name of the method
         downsample, // Function pointer to the method implementation
-        METH_VARARGS, // Flags indicating special features of this method
-        "Compute the largest triangle three buckets (LTTB) algorithm in a C extension." // Contents of this method's docstring
+        METH_VARARGS,
+        "Compute the largest triangle three buckets (LTTB) algorithm in a C extension."
     },
     {NULL, NULL, 0, NULL}
 };

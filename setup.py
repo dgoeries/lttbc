@@ -35,8 +35,20 @@ setup(
     long_description=read("README.txt"),
     long_description_content_type='text/markdown',
     license="MIT",
-    install_requires=[
-        'numpy'],
+    install_requires=['numpy'],
     setup_requires=['setuptools_scm'],
-    python_requires=">=3.5"
+    python_requires=">=3.5",
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Environment :: Console',
+        'Intended Audience :: Developers',
+        'Intended Audience :: Science/Research',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: Implementation :: CPython',
+        'Topic :: Scientific/Engineering :: Information Analysis',
+        'Topic :: Scientific/Engineering :: Physics',
+        'Topic :: Scientific/Engineering :: Visualization',
+    ]
 )
