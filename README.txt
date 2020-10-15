@@ -5,10 +5,10 @@ The code has been translated from the work of Sveinn Steinarsson (https://github
 
 Known features and requirements:
 
-- The algorithm requires onotonically and finite increasing x data
+- The algorithm requires monotonically increasing x data (finite)
 - The algorithm requires finite y data (otherwise problems might occur)
 - x and y data have to be of same length (of course)
-- The algorithm changes the **dtype** to **double**
+- The algorithm returns arrays of **dtype** **double**
 
 ## How to use on the field
 
@@ -23,6 +23,20 @@ The ``downsample`` function takes an input for ``x`` and ``y`` in addition to th
 
     x = np.arange(ARRAY_SIZE, dtype='int32')
     y = np.random.randint(1000, size=ARRAY_SIZE, dtype='uint64')
+
+    nx, ny = lttbc.downsample(x, y, THRESHOLD)
+
+    assert len(nx) == THRESHOLD
+    assert len(ny) == THRESHOLD
+    assert nx.dtype == np.double
+    assert ny.dtype == np.double
+
+    # List data or a mixture is accepted as well ...
+    x = [i for i in range(ARRAY_SIZE)]
+    y = [np.random.uniform(0, 1000) for _ in range(ARRAY_SIZE)]
+
+    assert isinstance(x, list)
+    assert isinstance(y, list)
 
     nx, ny = lttbc.downsample(x, y, THRESHOLD)
 

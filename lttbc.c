@@ -29,14 +29,14 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
     if (PyArray_NDIM(x_array) != 1 || PyArray_NDIM(y_array) != 1) {
         Py_DECREF(x_array);
         Py_DECREF(y_array);
-        PyErr_SetString(PyExc_ValueError, "Both x and y needs to have a single dimension ...");
+        PyErr_SetString(PyExc_ValueError, "Both x and y must have a single dimension ...");
         return NULL;
     }
 
     if (!PyArray_SAMESHAPE(x_array, y_array)) {
         Py_DECREF(x_array);
         Py_DECREF(y_array);
-        PyErr_SetString(PyExc_RuntimeError, "x and y must have the same dimension ...");
+        PyErr_SetString(PyExc_ValueError, "x and y must have the same dimension ...");
         return NULL;
     }
 
