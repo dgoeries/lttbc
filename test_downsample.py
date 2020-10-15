@@ -11,6 +11,47 @@ LARGE_ARRAY = 1000000
 LARGE_THRESHOLD = 10000
 
 
+def test_input_wrong_x_y():
+    """Test the down sampling with wrong input types for x or/and y"""
+    x = 1
+    y = np.array([True] * ARRAY_SIZE, dtype=np.bool)
+    with pytest.raises(TypeError):
+        lttbc.downsample(x, y, THRESHOLD)
+
+    x = np.array([True] * ARRAY_SIZE, dtype=np.bool)
+    y = 4
+    with pytest.raises(TypeError):
+        lttbc.downsample(x, y, THRESHOLD)
+
+    x = "wrong"
+    y = np.array([True] * ARRAY_SIZE, dtype=np.bool)
+    with pytest.raises(TypeError):
+        lttbc.downsample(x, y, THRESHOLD)
+
+    x = np.array([True] * ARRAY_SIZE, dtype=np.bool)
+    y = "wrong"
+    with pytest.raises(TypeError):
+        lttbc.downsample(x, y, THRESHOLD)
+
+    x = 1
+    y = "wrong"
+    with pytest.raises(TypeError):
+        lttbc.downsample(x, y, THRESHOLD)
+
+
+def test_single_dimension_validation():
+    """Test that the downsample algorithm rejects arrays with multiple dims"""
+    x = np.array([[0., 0.], [1., 0.8], [0.9, 0.8], [0.9, 0.7], [0.9, 0.6],
+                  [0.8, 0.5], [0.8, 0.5], [0.7, 0.5], [0.1, 0.], [0., 0.]],
+                 dtype=np.double)
+    assert x.shape == (10, 2)
+    assert x.ndim == 2
+
+    y = np.array([True] * ARRAY_SIZE, dtype=np.bool)
+    with pytest.raises(ValueError):
+        lttbc.downsample(x, y, THRESHOLD)
+
+
 def test_input_list():
     """Test the down sampling with lists types"""
     x = [value for value in range(ARRAY_SIZE)]

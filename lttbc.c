@@ -7,23 +7,32 @@
 
 static PyObject* downsample(PyObject *self, PyObject *args) {
     int threshold;
-    PyObject *x_obj=NULL, *y_obj=NULL;
+    PyObject *x_obj = NULL, *y_obj = NULL;
 
     if (!PyArg_ParseTuple(args, "OOi", &x_obj, &y_obj, &threshold))
         return NULL;
 
+    if ((!PyArray_Check(x_obj) && !PyList_Check(x_obj)) || (!PyArray_Check(y_obj) && !PyList_Check(y_obj))) {
+        PyErr_SetString(PyExc_TypeError, "Function requires x and y input to be of type list or ndarray ...");
+        return NULL;
+    }
+    PyArrayObject *x_array = NULL, *y_array = NULL;
     // Interpret the input objects as numpy arrays, with reqs (contiguous, aligned, and writeable ...)
-    PyArrayObject *x_array = PyArray_FROM_OTF(x_obj, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
-    PyArrayObject *y_array = PyArray_FROM_OTF(y_obj, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
+    x_array = PyArray_FROM_OTF(x_obj, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
+    y_array = PyArray_FROM_OTF(y_obj, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
     if (x_array == NULL || y_array == NULL) {
         Py_XDECREF(x_array);
         Py_XDECREF(y_array);
         return NULL;
     }
-    const npy_intp N = PyArray_DIM(x_array, 0);
-    const npy_intp M = PyArray_DIM(y_array, 0);
-    // Dimension check for both input arrays
-    if (N != M) {
+    if (PyArray_NDIM(x_array) != 1 || PyArray_NDIM(y_array) != 1) {
+        Py_DECREF(x_array);
+        Py_DECREF(y_array);
+        PyErr_SetString(PyExc_ValueError, "Both X or Y needs to have a single dimension ...");
+        return NULL;
+    }
+
+    if (!PyArray_SAMESHAPE(x_array, y_array)) {
         Py_DECREF(x_array);
         Py_DECREF(y_array);
         PyErr_SetString(PyExc_RuntimeError, "X and Y must have the same dimension ...");
@@ -31,7 +40,7 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
     }
 
     // Declare data length and check if we actually have to downsample!
-    const Py_ssize_t data_length = N;
+    const Py_ssize_t data_length =  PyArray_DIM(x_array, 0);
     if (threshold >= data_length || threshold <= 0) {
         // Nothing to do!
         PyObject *value = Py_BuildValue("OO", x_array, y_array);
@@ -51,7 +60,7 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
         PyArray_DescrFromType(NPY_DOUBLE), 0);
     PyArrayObject *sampled_y = PyArray_Empty(1, dims,
         PyArray_DescrFromType(NPY_DOUBLE), 0);
-    // Get access to its data
+    // Get a pointer to its data
     double *sampled_x_data = (double*)PyArray_DATA(sampled_x);
     double *sampled_y_data = (double*)PyArray_DATA(sampled_y);
 
