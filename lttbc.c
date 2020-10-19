@@ -41,8 +41,8 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
     if (threshold >= data_length || threshold <= 0) {
         // Nothing to do!
         PyObject *value = Py_BuildValue("OO", x_array, y_array);
-        Py_XDECREF(x_array);
-        Py_XDECREF(y_array);
+        Py_DECREF(x_array);
+        Py_DECREF(y_array);
         return value;
     }
 
@@ -152,10 +152,10 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
     PyObject *value = Py_BuildValue("OO", sampled_x, sampled_y);
 
     // And remove the references!
-    Py_XDECREF(x_array);
-    Py_XDECREF(y_array);
-    Py_XDECREF(sampled_x);
-    Py_XDECREF(sampled_y);
+    Py_DECREF(x_array);
+    Py_DECREF(y_array);
+    Py_DECREF(sampled_x);
+    Py_DECREF(sampled_y);
 
     return value;
 
