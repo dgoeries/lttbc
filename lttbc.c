@@ -18,6 +18,7 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
         PyErr_SetString(PyExc_TypeError, "Function requires x and y input to be of type list or ndarray ...");
         goto fail;
     }
+
     // Interpret the input objects as numpy arrays, with reqs (contiguous, aligned, and writeable ...)
     x_array = (PyArrayObject *)PyArray_FROM_OTF(x_obj, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
     y_array = (PyArrayObject *)PyArray_FROM_OTF(y_obj, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
@@ -36,7 +37,7 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
     }
 
     // Declare data length and check if we actually have to downsample!
-    Py_ssize_t data_length = PyArray_DIM(x_array, 0);
+    Py_ssize_t data_length = (Py_ssize_t)PyArray_DIM(x_array, 0);
     if (threshold >= data_length || threshold <= 0) {
         // Nothing to do!
         PyObject *value = Py_BuildValue("OO", x_array, y_array);
@@ -147,14 +148,14 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
         sampled_y_data[sampled_index] = 0.0;
     }
 
+    // Provide our return value
+    PyObject *value = Py_BuildValue("OO", sampled_x, sampled_y);
+
     // And remove the references!
     Py_XDECREF(x_array);
     Py_XDECREF(y_array);
     Py_XDECREF(sampled_x);
     Py_XDECREF(sampled_y);
-
-    // Provide our return value
-    PyObject *value = Py_BuildValue("OO", sampled_x, sampled_y);
 
     return value;
 
@@ -188,6 +189,7 @@ static struct PyModuleDef lttbc_module_definition = {
 
 // Module initialization
 PyMODINIT_FUNC PyInit_lttbc(void) {
+    int Py_IgnoreEnvironmentFlag = 1;
     Py_Initialize();
     import_array();
     return PyModule_Create(&lttbc_module_definition);
