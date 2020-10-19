@@ -37,7 +37,7 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
     }
 
     // Declare data length and check if we actually have to downsample!
-    Py_ssize_t data_length = (Py_ssize_t)PyArray_DIM(x_array, 0);
+    const Py_ssize_t data_length = (Py_ssize_t)PyArray_DIM(x_array, 0);
     if (threshold >= data_length || threshold <= 0) {
         // Nothing to do!
         PyObject *value = Py_BuildValue("OO", x_array, y_array);
