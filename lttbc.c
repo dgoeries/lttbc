@@ -189,7 +189,6 @@ static struct PyModuleDef lttbc_module_definition = {
 
 // Module initialization
 PyMODINIT_FUNC PyInit_lttbc(void) {
-    int Py_IgnoreEnvironmentFlag = 1;
     Py_Initialize();
     import_array();
     return PyModule_Create(&lttbc_module_definition);

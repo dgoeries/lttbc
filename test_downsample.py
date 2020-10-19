@@ -93,24 +93,6 @@ def test_threshold_larger():
     np.testing.assert_array_almost_equal(ny, y)
 
 
-def test_threshold_wrong_input():
-    """Test wrong input for threshold"""
-    x = np.arange(ARRAY_SIZE, dtype='int32')
-    y = np.random.randint(1000, size=ARRAY_SIZE, dtype='uint64')
-    assert sys.getrefcount(x) == 2
-    assert sys.getrefcount(y) == 2
-    # Float input
-    with pytest.raises(TypeError):
-        nx, ny = lttbc.downsample(x, y, 1.0)
-    with pytest.raises(TypeError):
-        nx, ny = lttbc.downsample(x, y, 1.)
-
-    # Using numpy integers does not raise an exception!
-    nx, ny = lttbc.downsample(x, y, np.uint32(1.))
-    assert sys.getrefcount(nx) == 2
-    assert sys.getrefcount(ny) == 2
-
-
 def test_input_list():
     """Test the down sampling with lists types"""
     x = [value for value in range(ARRAY_SIZE)]
