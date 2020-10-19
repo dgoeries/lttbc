@@ -16,10 +16,9 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
         PyErr_SetString(PyExc_TypeError, "Function requires x and y input to be of type list or ndarray ...");
         return NULL;
     }
-    PyArrayObject *x_array = NULL, *y_array = NULL;
     // Interpret the input objects as numpy arrays, with reqs (contiguous, aligned, and writeable ...)
-    x_array = PyArray_FROM_OTF(x_obj, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
-    y_array = PyArray_FROM_OTF(y_obj, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
+    PyArrayObject *x_array = (PyArrayObject *)PyArray_FROM_OTF(x_obj, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
+    PyArrayObject *y_array = (PyArrayObject *)PyArray_FROM_OTF(y_obj, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
     if (x_array == NULL || y_array == NULL) {
         Py_XDECREF(x_array);
         Py_XDECREF(y_array);
@@ -57,9 +56,9 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
     // Create an empty output array with shape and dim for the output!
     npy_intp dims[1];
     dims[0] = threshold;
-    PyArrayObject *sampled_x = PyArray_Empty(1, dims,
+    PyArrayObject *sampled_x = (PyArrayObject *)PyArray_Empty(1, dims,
         PyArray_DescrFromType(NPY_DOUBLE), 0);
-    PyArrayObject *sampled_y = PyArray_Empty(1, dims,
+    PyArrayObject *sampled_y = (PyArrayObject *)PyArray_Empty(1, dims,
         PyArray_DescrFromType(NPY_DOUBLE), 0);
     // Get a pointer to its data
     double *sampled_x_data = (double*)PyArray_DATA(sampled_x);
