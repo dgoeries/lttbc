@@ -9,7 +9,6 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
     int threshold;
     PyObject *x_obj = NULL, *y_obj = NULL;
     PyArrayObject *x_array = NULL, *y_array = NULL;
-    PyArrayObject *sampled_x = NULL, *sampled_y = NULL;
 
     if (!PyArg_ParseTuple(args, "OOi", &x_obj, &y_obj, &threshold))
         return NULL;
@@ -53,9 +52,9 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
     // Create an empty output array with shape and dim for the output!
     npy_intp dims[1];
     dims[0] = threshold;
-    sampled_x = (PyArrayObject *)PyArray_Empty(1, dims,
+    PyArrayObject *sampled_x = (PyArrayObject *)PyArray_Empty(1, dims,
         PyArray_DescrFromType(NPY_DOUBLE), 0);
-    sampled_y = (PyArrayObject *)PyArray_Empty(1, dims,
+    PyArrayObject *sampled_y = (PyArrayObject *)PyArray_Empty(1, dims,
         PyArray_DescrFromType(NPY_DOUBLE), 0);
     // Get a pointer to its data
     double *sampled_x_data = (double*)PyArray_DATA(sampled_x);
@@ -154,17 +153,14 @@ static PyObject* downsample(PyObject *self, PyObject *args) {
     // And remove the references!
     Py_DECREF(x_array);
     Py_DECREF(y_array);
-    Py_DECREF(sampled_x);
-    Py_DECREF(sampled_y);
+    Py_XDECREF(sampled_x);
+    Py_XDECREF(sampled_y);
 
     return value;
-
 
 fail:
     Py_XDECREF(x_array);
     Py_XDECREF(y_array);
-    Py_XDECREF(sampled_x);
-    Py_XDECREF(sampled_y);
     return NULL;
 }
 
