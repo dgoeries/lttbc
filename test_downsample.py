@@ -135,6 +135,18 @@ def test_input_list_array():
     np.testing.assert_array_almost_equal(ny, test_array_bool)
 
 
+def test_array_size():
+    """Test the input failure for different dimensions of arrays"""
+    x = np.arange(ARRAY_SIZE)
+    y = np.random.randint(1000, size=ARRAY_SIZE - 1, dtype='uint64')
+    assert sys.getrefcount(x) == 2
+    assert sys.getrefcount(y) == 2
+    with pytest.raises(ValueError):
+        assert lttbc.downsample(x, y, ARRAY_SIZE)
+    assert sys.getrefcount(x) == 2
+    assert sys.getrefcount(y) == 2
+
+
 def test_downsample_uint64():
     """Test the base down sampling of the module"""
     x = np.arange(ARRAY_SIZE, dtype='int32')
