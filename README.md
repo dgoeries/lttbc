@@ -1,5 +1,4 @@
-# lttbc: Largest-Triangle-Three-Buckets (Python using a c implementation) [![PyPi](https://img.shields.io/pypi/v/lttbc?color=blue)](https://pypi.org/project/lttbc/)
-
+# lttbc: Largest-Triangle-Three-Buckets (Python using a c implementation) [![PyPi](https://img.shields.io/pypi/v/lttbc?color=blue)](https://pypi.org/project/lttbc/) [![PyPI Downloads](https://img.shields.io/pypi/dm/lttbc.svg?label=PyPI%20downloads)](https://pypi.org/project/lttbc/) [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/lttbc.svg?label=Conda%20downloads)](https://anaconda.org/conda-forge/lttbc)
 This is a low-level implementation of the `Largest-Triangle-Three-Buckets` (LTTB) downsampling algorithm written in Python.
 
 The code has been translated from the work of Sveinn Steinarsson (https://github.com/sveinn-steinarsson/flot-downsample/).
