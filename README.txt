@@ -21,8 +21,8 @@ The ``downsample`` function takes an input for ``x`` and ``y`` in addition to th
     ARRAY_SIZE = 10000
     THRESHOLD = 1000
 
-    x = np.arange(ARRAY_SIZE, dtype='int32')
-    y = np.random.randint(1000, size=ARRAY_SIZE, dtype='uint64')
+    x = np.arange(ARRAY_SIZE, dtype=np.int32)
+    y = np.random.randint(1000, size=ARRAY_SIZE, dtype=np.uint64)
 
     nx, ny = lttbc.downsample(x, y, THRESHOLD)
 
@@ -32,7 +32,7 @@ The ``downsample`` function takes an input for ``x`` and ``y`` in addition to th
     assert ny.dtype == np.double
 
     # List data or a mixture is accepted as well ...
-    x = [i for i in range(ARRAY_SIZE)]
+    x = list(range(ARRAY_SIZE))
     y = [np.random.uniform(0, 1000) for _ in range(ARRAY_SIZE)]
 
     assert isinstance(x, list)
