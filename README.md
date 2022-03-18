@@ -58,4 +58,3 @@ The ``downsample`` function takes an input for ``x`` and ``y`` in addition to th
     assert len(ny) == THRESHOLD
     assert nx.dtype == np.double
     assert ny.dtype == np.double
-
