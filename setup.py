@@ -2,9 +2,8 @@
 import os.path as osp
 import sys
 
-from setuptools import setup, Extension
-
 import numpy
+from setuptools import Extension, setup
 
 
 def get_script_path():
