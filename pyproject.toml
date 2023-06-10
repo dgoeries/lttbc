@@ -2,16 +2,16 @@
 requires = [
     "setuptools>=51.0",
     "wheel>=0.36",
-    "numpy>=1.16",
+    "numpy==1.22"
 ]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "lttbc"
-version = "0.2.2"
+version = "0.2.4"
 description ="Largest triangle three buckets module for Python written in C"
 dynamic = ["readme"]
-requires-python = ">=3.5"
+requires-python = ">=3.8"
 authors = [
   {name = "European XFEL GmbH", email = "dennis.goeries@xfel.eu"}
 ]
@@ -19,7 +19,7 @@ maintainers = [
   {name = "Dennis Goeries", email = "dennis.goeries@xfel.eu"},
 ]
 dependencies = [
-    "numpy>=1.16",
+    "numpy>=1.22",
 ]
 license = {text = "MIT"}
 classifiers = [
