@@ -1,27 +1,22 @@
 [build-system]
-requires = [
-    "setuptools>=51.0",
-    "wheel>=0.36",
-    "numpy==1.22"
-]
-build-backend = "setuptools.build_meta"
+requires = ["pdm-backend", "numpy==1.22"]
+build-backend = "pdm.backend"
 
 [project]
 name = "lttbc"
 version = "0.2.4"
-description ="Largest triangle three buckets module for Python written in C"
-dynamic = ["readme"]
+description = "Largest triangle three buckets module for Python written in C"
 requires-python = ">=3.8"
 authors = [
-  {name = "European XFEL GmbH", email = "dennis.goeries@xfel.eu"}
+    { name = "European XFEL GmbH", email = "dennis.goeries@xfel.eu" },
 ]
 maintainers = [
-  {name = "Dennis Goeries", email = "dennis.goeries@xfel.eu"},
+    { name = "Dennis Goeries", email = "dennis.goeries@xfel.eu" },
 ]
 dependencies = [
     "numpy>=1.22",
 ]
-license = {text = "MIT"}
+license = { text = "MIT" }
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
@@ -35,9 +30,23 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Physics",
     "Topic :: Scientific/Engineering :: Visualization",
 ]
+readme = "README.md"
+
 [project.urls]
 "git" = "https://github.com/dgoeries/lttbc"
 
+[tool.pdm.dev-dependencies]
+lint = [
+    "flake8",
+]
+test = ["pytest", "pytest-cov"]
 
-[tool.setuptools.dynamic]
-readme = {file = ["README.txt"], content-type = "text/markdown"}
+[tool.pdm.scripts]
+test = "pytest tests"
+lint = "flake8 src/"
+
+[tool.pdm]
+distribution = true
+
+[tool.pdm.build]
+run-setuptools = true # run setup.py for the C Extension
