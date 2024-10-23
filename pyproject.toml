@@ -1,27 +1,27 @@
 [build-system]
 requires = [
-    "setuptools>=51.0",
-    "wheel>=0.36",
-    "numpy==1.22"
+    "setuptools>=65.5.0",
+    "wheel>=0.40",
+    "numpy>=2.0"
 ]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "lttbc"
-version = "0.2.4"
-description ="Largest triangle three buckets module for Python written in C"
+version = "0.3.0"
+description = "Largest triangle three buckets module for Python written in C"
 dynamic = ["readme"]
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 authors = [
-  {name = "European XFEL GmbH", email = "dennis.goeries@xfel.eu"}
+    { name = "European XFEL GmbH", email = "dennis.goeries@xfel.eu" }
 ]
 maintainers = [
-  {name = "Dennis Goeries", email = "dennis.goeries@xfel.eu"},
+    { name = "Dennis Goeries", email = "dennis.goeries@xfel.eu" },
 ]
 dependencies = [
-    "numpy>=1.22",
+    "numpy>=2.0",
 ]
-license = {text = "MIT"}
+license = { text = "MIT" }
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
@@ -38,6 +38,5 @@ classifiers = [
 [project.urls]
 "git" = "https://github.com/dgoeries/lttbc"
 
-
 [tool.setuptools.dynamic]
-readme = {file = ["README.txt"], content-type = "text/markdown"}
+readme = { file = ["README.md"], content-type = "text/markdown" }
